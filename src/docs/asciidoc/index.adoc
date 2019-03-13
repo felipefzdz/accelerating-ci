@@ -1,0 +1,284 @@
+= Accelerating CI
+:revnumber: {project-version}
+:example-caption!:
+ifndef::imagesdir[:imagesdir: images]
+ifndef::sourcedir[:sourcedir: ../java]
+:navigation:
+:menu:
+:status:
+:title-slide-background-image: title.jpeg
+:title-slide-background-transition: none
+:icons: font
+
+Tightening the feedback loop for developers, delivering changes to production faster, and reducing CI resources costs
+
+
+== Introduction
+
+[cols="2*^.<"]
+|=== 
+a| image::gradle-build-tool-dark-green-primary.svg[width=auto, height=86px] 
+a| image::gradle-enterprise-gradient-primary.svg[width=auto, height=100px] 
+
+.<| Build automation 
+.<| Development productivity +
+(Gradle & Maven)
+|===
+
+Felipe Fernández (@felipefzdz)
+
+
+
+== What is Gradle Enterprise
+
+image::what-is.png[width=auto, height=auto]  
+
+
+== Acceleration factors
+
+* Less time waiting for feedback
+** Incremental and modular CI
+* Increase resource efficiency
+** Know your infra
+* Avoid maintenance waste
+** CI as code
+
+
+== Less time waiting for feedback
+
+=== Efficient pipeline structure
+
+[.shadow]
+image::tc_queue.png[width=600, height=auto]
+
+Break big builds. Not too much. Scheduling is not negligible
+
+=== Efficient pipeline structure
+
+[.shadow]
+image::parallel.png[width=600, height=auto]
+
+Parallel builds
+
+=== Efficient pipeline structure
+
+[.shadow]
+image::key_build.png[width=1000, height=auto]
+
+Stage, key builds. Developers care about this.
+
+== Avoid repeating work
+
+=== What is a build cache?
+
+image::what-is-a-build-cache.png[width=700px, height=auto]
+
+When the inputs have not changed, the output can be reused from a previous run.
+
+
+=== Build Cache on CI
+
+[.shadow]
+image::seed.png[width=600, height=auto]
+Avoid race conditions by using a seed/warm-cache/fan-out build
+
+
+=== Reuse CI work locally
+
+[.shadow]
+image::ci_local_build_cache_strategy.svg[width=430px, height=auto]
+
+GE Build Cache also gives you replication for distributed teams
+
+=== TC Personal Builds
+
+[.shadow]
+image::personal.png[width=500px, height=auto]
+
+Run as a precommit check and reuse cache outputs
+
+== Increase resource efficiency
+
+=== CI agent environment
+
+* Physical machines
+** Less efficient. Operational costs. Requires economic analysis
+
+=== CI agent environment
+
+* Persistent virtual machines
+** Cattle not pets
+
+=== CI agent environment
+
+* Semi permanent VMs or containers (state retained between builds)
+** EC2 spot instances with idle timeout
+
+=== CI agent environment
+
+* Ephemeral containers (state discarded for every build)
+** Loses Gradle optimizations. Dependency cache, daemon, JIT
+** Repository mirrors
+
+=== CI agent pools
+
+* Correct sizing
+** OS, project. Driven by metrics
+* Priorities
+** Seed builds should not wait
+
+== Measure acceleration
+
+=== Measure acceleration
+
+* Define key metrics
+** Time Spent in Queue. Total time of key build. Retry ratio
+
+=== Measure acceleration
+
+[.shadow]
+image::statistics.png[width=1000px, height=auto]
+
+TC Rest API. Ensure that you're going in the right direction
+
+=== Measure acceleration
+
+[.shadow]
+image::performance.png[width=1000px, height=auto]
+
+GE performance dashboard. Understand build cache gains over the time
+
+=== Measure acceleration
+
+[source,json]
+----
+id: 2
+event: BuildEvent
+data: {
+    "timestamp": 1466640000001,
+    "type": {
+        "majorVersion": 1,
+        "minorVersion": 0,
+        "eventType": "BuildRequestedTasks"
+    },
+    "data": {
+        "excluded": [],
+        "requested": ["build"]
+    }
+}
+----
+
+GE Export API. Create your own analytics
+
+=== Keep CI healthy
+
+* Flaky tests
+** Build cop. Automated tagging. Automated retrying
+* Different reasons for failure
+** Legit, flaky, environmental
+
+
+== Avoid maintenance waste
+
+=== CI infra as code
+
+* Configuration management
+** It ensures that defined states are held
+* Handle agents
+** Scale and troubleshoot easily
+* Evolve your appliance
+** With auditable code
+
+=== CI logic as code
+
+* TC Kotlin DSL
+** Stop clicking on screens
+* Reuse and generalize
+** Agent requirements, cleaning steps, retry policies
+
+
+=== Split jobs example
+
+[source, kotlin]
+val browserTests = subProject(":scans-server-test-browser") {
+    (1..8).map { group ->
+        gradleBuildType("Group $group ") {
+            uuid = "fd6fc3c7-e0c9-49df-a88f-59f385ef7629".toId(group.toString())
+            buildType {
+                dependencies {
+                    snapshot(BuildTypeRegistry.get(sanityCheckBuild))
+                }
+                artifactRules = "scans-server-test-browser/build/reports/geb/** => geb"
+            }
+            gradle {
+                tasks = ":scans-server-test-browser:testGroup$group"
+            }
+        }
+    }
+}
+
+TC Kotlin DSL
+
+=== Split jobs example
+
+[source, kotlin]
+----
+fun Project.gradleBuildType(spec: GradleBuildTypeSpec): Deferred<BuildType> {
+    return BuildTypeRegistry.register(spec, buildType(spec.name) {
+        spec.buildTypeInit(this)
+        spec.uuid?.let { uuid = it.toId(ProjectContext.branch.name) }
+
+        steps {
+            gradle {
+                buildFile = ""
+                enableStacktrace = true
+                useGradleWrapper = true
+                apply(spec.gradleStepInit)
+                tasks = "clean $tasks"
+                gradleParams = gradleParams ?: gradleDefaultParameters
+                addGradleParam("--daemon")
+            }
+        }
+    })
+}
+----
+
+Reusable components
+
+=== Split jobs example
+
+[source, groovy]
+----
+spec.count.times { i ->
+    tasks.create("testGroup${i + 1}", Test) { Test t ->
+        dependsOn project.tasks.create("configure${t.name.capitalize()}").doFirst {
+            def sourceTree = sourceSets.test.allSource
+            def files = sourceTree.files.sort(false) { it.absolutePath }
+
+            def notGroovyFiles = files.findAll { !it.name.endsWith(".groovy") }
+            assert notGroovyFiles.empty
+
+            def filesWithBasesStripped = files.findAll { !it.name.startsWith("Base") }
+            def groups = ListUtil.distribute(filesWithBasesStripped, spec.count)
+
+            assert groups.size == spec.count
+            assert groups.flatten().size() == filesWithBasesStripped.size()
+
+            def group = groups[i]
+            def patterns = group.collect {
+                def className = it.name.substring(0, it.name.length() - ".groovy".length())
+                className.toString()
+            }
+            t.setTestNameIncludePatterns(patterns)
+        }
+    }
+}
+----
+
+Gradle FTW
+
+== Slides
+
+https://github.com/felipefzdz/accelerating-ci
+
+[%conceal]

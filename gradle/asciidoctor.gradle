@@ -1,0 +1,70 @@
+asciidoctor {
+    dependsOn jrubyPrepare, download, copyTheme
+    sources { include 'index.adoc' }
+
+    resources {
+        from(sourceDir) { include 'images/**' }
+        from(downloadDir) { include 'reveal.js/**' }
+    }
+
+    backends = ['revealjs']
+
+    attributes = [
+        'sourcedir'           : project.sourceSets.main.java.srcDirs[0],
+        'endpoint-url'        : 'http://example.org',
+        'source-highlighter'  : 'highlightjs',
+        'imagesdir'           : './images',
+        'toc'                 : 'left',
+        'icons'               : 'font',
+        'setanchors'          : 'true',
+        'idprefix'            : '',
+        'idseparator'         : '-',
+        'basedir'             : projectDir,
+        'docinfo1'            : 'true',
+        'width'               : presentationWidth,
+        'height'              : presentationHeight,
+        'project-version'     : '1.0',
+        'revealjs_transition' : 'none',
+        'revealjs_history'    : 'true',
+        'revealjs_slideNumber': 'true',
+        'revealjs_theme'      : 'style',
+        'examples'            : file("${projectDir}/examples")
+    ]
+    options = [
+        template_dirs: [new File(templateDir, "asciidoctor-reveal.js-$asciidoctorBackendVersion/templates/slim").absolutePath]
+    ]
+
+    if (System.getProperty("os.name").toLowerCase().contains("mac")) {
+        doLast {
+            ["osascript", "-e", """
+                try
+                    tell application "Finder" to get application file id "com.google.Chrome"
+                    set appExists to true
+                on error
+                    set appExists to false
+                end try
+                if appExists then
+                    tell application "Google Chrome"
+                        set theUrl to "file://$outputDir.absolutePath"
+                        set found to false
+                        set theWindowIndex to 0
+                        repeat with theWindow in every window
+                            set theTabIndex to 0
+                            repeat with theTab in every tab of theWindow
+                                set theTabIndex to theTabIndex + 1
+                                if theTab's URL starts with theUrl then
+                                    set found to true
+                                    tell application "Google Chrome" to set active tab index of theWindow to theTabIndex
+                                    tell theTab to reload
+                                end if
+                            end repeat
+                        end repeat
+                        if not found then
+                            set URL of (active tab of (make new window)) to theUrl & "/revealjs/index.html"
+                        end if
+                    end tell
+                end if
+            """].execute()
+        }
+    }
+}

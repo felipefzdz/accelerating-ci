@@ -1,0 +1,460 @@
+/**
+ * Beige theme for reveal.js.
+ *
+ * Copyright (C) 2011-2012 Hakim El Hattab, http://hakim.se
+ */
+@import url(https://assets.gradle.com/lato/css/lato-font.css);
+@import url(https://assets.gradle.com/inconsolata/inconsolata.css);
+
+/*********************************************
+ * GLOBAL STYLES
+ *********************************************/
+:root {
+  --text-color: #02303A;
+  --accent-color: #00C489;
+  --accent2-color: #00C489;
+  --diagram-color: #23A1C7;
+}
+
+body {
+  background: white;
+}
+
+.reveal {
+  font-family: "Lato", sans-serif;
+  font-weight: 300;
+  font-size: 1.8em;
+  color: #02303A;
+}
+
+
+.reveal .slides > section,
+.reveal .slides > section > section {
+  line-height: 1.3;
+  font-weight: inherit;
+}
+
+/*********************************************
+ * HEADERS
+ *********************************************/
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4,
+.reveal h5,
+.reveal h6 {
+  margin: 0 0 20px 0;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: normal;
+  text-shadow: none;
+  word-wrap: break-word;
+  
+  color: #069fce;
+  -webkit-text-fill-color: transparent;
+  background: -webkit-linear-gradient(
+    left,
+    #069fce 0,
+    #51cbbf 100%
+  );
+  -webkit-background-clip: text;
+  
+}
+
+.reveal h1 {
+  font-size: 1.8em;
+}
+
+.reveal h2 {
+  font-size: 1.8em;
+}
+
+.reveal h3 {
+  font-size: 1.55em;
+}
+
+.reveal h4 {
+  font-size: 1em;
+}
+
+.preamble p {
+  color: white;
+  text-align: center;
+  font-size: 1em;
+}
+
+.author {
+  color: #00C489;
+}
+
+/*********************************************
+ * OTHER
+ *********************************************/
+.reveal p {
+  margin: 20px 0;
+  line-height: 1.3;
+}
+
+/* Ensure certain elements are never larger than the slide itself */
+.reveal img,
+.reveal video,
+.reveal iframe {
+  max-width: 95%;
+  max-height: 95%;
+  /* border: 1px solid #ced6ce; */
+/*  padding: 4px;*/
+}
+
+.reveal strong,
+.reveal b {
+  font-weight: 400;
+}
+
+.reveal em {
+  font-style: italic;
+}
+
+.reveal ol,
+.reveal dl,
+.reveal ul {
+  display: inline-block;
+  text-align: left;
+  margin: 0 0 0 1em;
+}
+
+.reveal ol {
+  list-style-type: decimal;
+}
+
+.reveal ul {
+  list-style-type: disc;
+}
+
+.reveal ul ul {
+  list-style-type: square;
+}
+
+.reveal ul ul ul {
+  list-style-type: circle;
+}
+
+.reveal ul ul,
+.reveal ul ol,
+.reveal ol ol,
+.reveal ol ul {
+  display: block;
+  margin-left: 40px;
+}
+
+.reveal dt {
+  font-weight: bold;
+}
+
+.reveal dd {
+  margin-left: 40px;
+}
+
+.reveal q,
+.reveal blockquote {
+  quotes: none;
+}
+
+.reveal blockquote {
+  display: block;
+  position: relative;
+  width: 70%;
+  margin: 20px auto;
+  padding: 5px;
+  font-style: italic;
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.2);
+}
+
+.reveal blockquote p:first-child,
+.reveal blockquote p:last-child {
+  display: inline-block;
+}
+
+.reveal q {
+  font-style: italic;
+}
+
+.reveal pre {
+  display: block;
+  position: relative;
+  margin: 20px auto;
+  text-align: left;
+  font-size: 12px;
+  font-family: Inconsolata, monospace;
+  line-height: 1.2em;
+  word-wrap: break-word;
+}
+
+.reveal code {
+  font-family: Inconsolata, monospace;
+}
+
+.reveal pre code {
+  display: block;
+  padding: 9px;
+  overflow: auto;
+  max-height: 500px;
+  word-wrap: normal;
+  border-radius: 9px;
+}
+
+.reveal table {
+  margin: auto;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.reveal table th {
+  font-weight: bold;
+}
+
+.reveal table th,
+.reveal table td {
+  text-align: left;
+  padding: 0.2em 0.5em 0.2em 0.5em;
+/*  border-bottom: 1px solid;*/
+}
+
+.reveal table th[align="center"],
+.reveal table td[align="center"] {
+  text-align: center;
+}
+
+.reveal table th[align="right"],
+.reveal table td[align="right"] {
+  text-align: right;
+}
+
+.reveal table tbody tr:last-child th,
+.reveal table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.reveal sup {
+  vertical-align: super;
+}
+
+.reveal sub {
+  vertical-align: sub;
+}
+
+.reveal small {
+  display: inline-block;
+  font-size: .8em;
+  line-height: 1.2em;
+  vertical-align: top;
+}
+
+.reveal small * {
+  vertical-align: top;
+}
+
+/*********************************************
+ * LINKS
+ *********************************************/
+.reveal a {
+  color: #1ba8cb;
+  text-decoration: none;
+  -webkit-transition: color .15s ease;
+  -moz-transition: color .15s ease;
+  transition: color .15s ease;
+}
+
+.reveal a:hover {
+  color: #35c1e4;
+  text-shadow: none;
+  border: none;
+}
+
+.reveal .roll span:after {
+  color: #02303A;
+  background: white;
+}
+
+/*********************************************
+ * IMAGES
+ *********************************************/
+.reveal section img {
+  margin: 15px 0px;
+}
+
+.reveal section img.plain {
+  border: 0;
+  box-shadow: none;
+}
+
+.reveal a img {
+  -webkit-transition: all .15s linear;
+  -moz-transition: all .15s linear;
+  transition: all .15s linear;
+}
+
+.reveal a:hover img {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/*********************************************
+ * NAVIGATION CONTROLS
+ *********************************************/
+.reveal .controls .navigate-left,
+.reveal .controls .navigate-left.enabled {
+  border-right-color: #1ba8cb;
+}
+
+.reveal .controls .navigate-right,
+.reveal .controls .navigate-right.enabled {
+  border-left-color: #1ba8cb;
+}
+
+.reveal .controls .navigate-up,
+.reveal .controls .navigate-up.enabled {
+  border-bottom-color: #1ba8cb;
+}
+
+.reveal .controls .navigate-down,
+.reveal .controls .navigate-down.enabled {
+  border-top-color: #1ba8cb;
+}
+
+.reveal .controls .navigate-left.enabled:hover {
+  border-right-color: #1ba8cb;
+}
+
+.reveal .controls .navigate-right.enabled:hover {
+  border-left-color: #1ba8cb;
+}
+
+.reveal .controls .navigate-up.enabled:hover {
+  border-bottom-color: #1ba8cb;
+}
+
+.reveal .controls .navigate-down.enabled:hover {
+  border-top-color: #1ba8cb;
+}
+
+/*********************************************
+ * PROGRESS BAR
+ *********************************************/
+.reveal .progress {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.reveal .progress span {
+  background: #23A1C7;
+  background-image: linear-gradient(135deg, #069fce 0, #51cbbf 100%);
+  -webkit-transition: width 800ms cubic-bezier(0.26, 0.86, 0.44, 0.985);
+  -moz-transition: width 800ms cubic-bezier(0.26, 0.86, 0.44, 0.985);
+  transition: width 800ms cubic-bezier(0.26, 0.86, 0.44, 0.985);
+}
+
+.pictureWrapper {
+  width: 100%;
+}
+
+.picture {
+  width: 100%;
+  position: absolute;
+  top: -50px;
+  right: 0px;
+  z-index: 2;
+  text-align: right;
+}
+
+.drawing {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 650px;
+}
+
+.drawing canvas {
+  left: 0;
+  top: 0;
+}
+
+.reveal code {
+/*  font-weight: bold;*/
+}
+
+.reveal pre code {
+  font-size: 1.5em;
+  line-height: 1.2em;
+  font-weight: normal;
+}
+
+.reveal .fa {
+  font-family: 'FontAwesome';
+  font-style: normal;
+}
+
+/*********************************************
+ * Custom CSS
+ *********************************************/
+
+.lab > h2 {
+  font-weight: 600;
+}
+
+.use-case > h2 {
+  font-style: italic !important;
+}
+
+.use-case > .use-case__number {
+  position: fixed;
+  bottom: 0;
+  left: calc(-45vw + 55%);
+  font-size: 10px;
+}
+
+section[data-state="title"] {
+  position: absolute !important;
+  top: 500px !important;
+}
+
+.full-width {
+  position: relative !important;
+  width: 100vw !important;
+  left: calc(-50vw + 50%) !important;
+}
+
+.halign-center {
+  text-align: center !important;
+}
+
+.halign-right {
+  text-align: right !important;
+}
+
+.valign-middle {
+  vertical-align: middle !important;
+}
+
+.valign-top {
+  vertical-align: top !important;
+}
+
+.imageblock.shadow img, .shadow:not(.imageblock) {
+  box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
+}
+
+.small {
+  font-size: .8em !important; 
+}
+
+.reveal h1 {
+  color: #069fce;
+  -webkit-text-fill-color: transparent;
+  background: -webkit-linear-gradient(
+    left,
+    #069fce 0,
+    #51cbbf 100%
+  );
+  -webkit-background-clip: text;
+  
+}
