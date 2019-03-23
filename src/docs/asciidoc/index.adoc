@@ -28,127 +28,91 @@ a| image::gradle-enterprise-gradient-primary.svg[width=auto, height=100px]
 Felipe Fernández (@felipefzdz)
 
 
-
 == What is Gradle Enterprise
 
-image::what-is.png[width=auto, height=auto]  
+image::what-is.png[width=700px, height=auto]
 
+== Slow pipelines
 
-== Acceleration factors
+image::water.jpg[width=auto, height=600px]
 
-* Less time waiting for feedback
-** Incremental and modular CI
-* Increase resource efficiency
-** Know your infra
-* Avoid maintenance waste
-** CI as code
+== Wasting CI resources
 
+image::paella.jpg[width=auto, height=600px]
 
-== Less time waiting for feedback
+== Optimising by ear
 
-=== Efficient pipeline structure
+image::marathon.jpg[width=auto, height=600px]
 
-[.shadow]
-image::tc_queue.png[width=600, height=auto]
+== Manual maintenance
 
-Break big builds. Not too much. Scheduling is not negligible
+image::dog.jpg[width=auto, height=600px]
 
-=== Efficient pipeline structure
+== Work avoidance and parallelisation
 
-[.shadow]
-image::parallel.png[width=600, height=auto]
-
-Parallel builds
-
-=== Efficient pipeline structure
-
-[.shadow]
-image::key_build.png[width=1000, height=auto]
-
-Stage, key builds. Developers care about this.
-
-== Avoid repeating work
-
-=== What is a build cache?
+=== Work avoidance
 
 image::what-is-a-build-cache.png[width=700px, height=auto]
 
 When the inputs have not changed, the output can be reused from a previous run.
 
-
 === Build Cache on CI
-
-[.shadow]
-image::seed.png[width=600, height=auto]
-Avoid race conditions by using a seed/warm-cache/fan-out build
-
-
-=== Reuse CI work locally
 
 [.shadow]
 image::ci_local_build_cache_strategy.svg[width=430px, height=auto]
 
-GE Build Cache also gives you replication for distributed teams
+Reliable reuse between CI and developers
+
+=== Seed build
+
+[.shadow]
+image::seed.png[width=600, height=auto]
+
+Efficient use of the cache by using a seed/warm-cache/fan-out build
+
+=== Efficient pipeline structure
+
+[.shadow]
+image::parallel.png[width=auto, height=450px]
+
+Break big builds. Not too much. Scheduling is not negligible
 
 === TC Personal Builds
 
 [.shadow]
-image::personal.png[width=500px, height=auto]
+image::personal.png[width=auto, height=450px]
 
 Run as a precommit check and reuse cache outputs
 
-== Increase resource efficiency
+== Increase CI resource efficiency
 
-=== CI agent environment
+=== Teamcity Architecture
 
-* Physical machines
-** Less efficient. Operational costs. Requires economic analysis
+[.shadow]
+image::tc.png[width=auto, height=600px]
 
-=== CI agent environment
+=== CI agent environments
 
-* Persistent virtual machines
-** Cattle not pets
+* Bare hardware
+* Virtual machines
+* Semi permanent containers
+* Ephemeral containers
 
-=== CI agent environment
+=== Performance on CI agent environments
 
-* Semi permanent VMs or containers (state retained between builds)
-** EC2 spot instances with idle timeout
+=== Operations on CI agent environments
 
-=== CI agent environment
-
-* Ephemeral containers (state discarded for every build)
-** Loses Gradle optimizations. Dependency cache, daemon, JIT
-** Repository mirrors
-
-=== CI agent pools
-
-* Correct sizing
-** OS, project. Driven by metrics
-* Priorities
-** Seed builds should not wait
+=== Gradle Enterprise CI agent setup
 
 == Measure acceleration
 
-=== Measure acceleration
+=== Key Metrics
 
-* Define key metrics
-** Time Spent in Queue. Total time of key build. Retry ratio
+* Time Spent in Queue
+* Total time of key build
+* Retry ratio
 
-=== Measure acceleration
-
-[.shadow]
-image::statistics.png[width=1000px, height=auto]
-
-TC Rest API. Ensure that you're going in the right direction
-
-=== Measure acceleration
-
-[.shadow]
-image::performance.png[width=1000px, height=auto]
-
-GE performance dashboard. Understand build cache gains over the time
-
-=== Measure acceleration
+=== GE Export API
 
 [source,json]
 ----
@@ -170,32 +134,26 @@ data: {
 
 GE Export API. Create your own analytics
 
-=== Keep CI healthy
+=== GE Performance Dashboard
 
-* Flaky tests
-** Build cop. Automated tagging. Automated retrying
-* Different reasons for failure
-** Legit, flaky, environmental
+[.shadow]
+image::performance.png[width=1000px, height=auto]
 
+GE performance dashboard. Understand build cache gains over the time
+
+=== Teamcity REST API
+
+[.shadow]
+image::statistics.png[width=1000px, height=auto]
+
+TC Rest API. Ensure that you're going in the right direction
 
 == Avoid maintenance waste
 
-=== CI infra as code
+=== Use cases
 
-* Configuration management
-** It ensures that defined states are held
-* Handle agents
-** Scale and troubleshoot easily
-* Evolve your appliance
-** With auditable code
-
-=== CI logic as code
-
-* TC Kotlin DSL
-** Stop clicking on screens
-* Reuse and generalize
-** Agent requirements, cleaning steps, retry policies
-
+* Reuse and search
+* Review and audit
 
 === Split jobs example
 
