@@ -235,8 +235,15 @@ spec.count.times { i ->
 
 Gradle FTW
 
+== Conclusion
+
+* Shape your pipeline around the build cache and parallelisation
+* Be aware of the trade offs when setting up CI agents infra
+* Measure everything
+* CI as code
+
 == Slides
 
-https://github.com/felipefzdz/accelerating-ci
+https://felipefzdz.github.io/accelerating-ci
 
 [%conceal]
