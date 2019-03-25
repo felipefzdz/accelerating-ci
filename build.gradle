@@ -88,52 +88,14 @@ download {
 
 apply from: 'gradle/asciidoctor.gradle'
 
-task installDecktape(type: NpmTask) {
-    command 'install'
-    cmdArgs 'decktape'
-}
+githubPages {
+    repoUri = 'https://github.com/felipefzdz/accelerating-ci' (1)
+    credentials { (2)
+        username = project.hasProperty('githubToken') ? project.githubToken : ''
+        password = ''
+    }
 
-task generatePdf {
-    def asciidocFile = file("$buildDir/asciidoc/revealjs/index.html")
-    def outputDir = file("$buildDir/decktape")
-    inputs.file asciidocFile
-    outputs.dir outputDir
-    doLast {
-        mkdir outputDir
-        nodeexec {
-            script 'node_modules/.bin/decktape'
-            scriptArgs '--size', "${(int) (presentationWidth * aspectRatio)}x${(int) (presentationHeight * aspectRatio)}",
-                'reveal', 'file://' + asciidocFile.absolutePath, file("$outputDir/${project.name}.pdf")
-            workingDir npm.homeDirectory
-            executable nodejs.resolvedNodeExecutable
-        }
+    pages {
+        from 'build/asciidoc/html5'
     }
 }
-generatePdf.dependsOn installDecktape, asciidoctor
-
-def content = copySpec {
-    from('src/materials')           
-    exclude { it.file.name in ['.gradle', 'build', 'target'] && it.file.isDirectory() }
-    from tasks.generatePdf, {
-      rename { "slides.pdf" }
-    }
-}
-
-task assembleZip(type: Sync) {
-    with content
-    into "$buildDir/zip"
-}
-
-task prepareZip(type: Zip) {
-    with content
-}
-
-s3 {
-    bucket = 'gradle-training-materials'
-    awsProfile = 'gradle-cs-dev'
-    upload {
-        key = prepareZip.archiveName
-        file = prepareZip.archivePath
-    }
-}
-s3Upload.dependsOn prepareZip
