@@ -10,8 +10,9 @@ ifndef::sourcedir[:sourcedir: ../java]
 :title-slide-background-transition: none
 :icons: font
 
-Tightening the feedback loop for developers, delivering changes to production faster, and reducing CI resources costs
+image::Greach_stickers-2.png[width=auto, height=40px]
 
+Tightening the feedback loop for developers, delivering changes to production faster, and reducing CI resources costs
 
 == Introduction
 
@@ -242,8 +243,10 @@ Gradle FTW
 * Measure everything
 * CI as code
 
-== Slides
+== Questions
 
-https://felipefzdz.github.io/accelerating-ci
+* https://greach.contestia.es
+
+* https://felipefzdz.github.io/accelerating-ci
 
 [%conceal]
