@@ -247,6 +247,6 @@ Gradle FTW
 
 * https://greach.contestia.es
 
-* https://felipefzdz.github.io/accelerating-ci
+* https://github.com/felipefzdz/accelerating-ci
 
 [%conceal]
