@@ -37,6 +37,10 @@ image::what-is.png[width=700px, height=auto]
 
 image::water.jpg[width=auto, height=600px]
 
+== Manual maintenance
+
+image::dog.jpg[width=auto, height=600px]
+
 == Wasting CI resources
 
 image::paella.jpg[width=auto, height=600px]
@@ -44,10 +48,6 @@ image::paella.jpg[width=auto, height=600px]
 == Optimising by ear
 
 image::marathon.jpg[width=auto, height=600px]
-
-== Manual maintenance
-
-image::dog.jpg[width=auto, height=600px]
 
 == Work avoidance and parallelisation
 
@@ -84,70 +84,6 @@ Break big builds. Not too much. Scheduling is not negligible
 image::personal.png[width=auto, height=450px]
 
 Run as a precommit check and reuse cache outputs
-
-== Increase CI resource efficiency
-
-=== Teamcity Architecture
-
-[.shadow]
-image::tc.png[width=auto, height=600px]
-
-=== CI agent environments
-
-* Bare hardware
-* Virtual machines
-* Semi permanent containers
-* Ephemeral containers
-
-=== Performance on CI agent environments
-
-=== Operations on CI agent environments
-
-=== Gradle Enterprise CI agent setup
-
-== Measure acceleration
-
-=== Key Metrics
-
-* Time Spent in Queue
-* Total time of key build
-* Retry ratio
-
-=== GE Export API
-
-[source,json]
-----
-id: 2
-event: BuildEvent
-data: {
-    "timestamp": 1466640000001,
-    "type": {
-        "majorVersion": 1,
-        "minorVersion": 0,
-        "eventType": "BuildRequestedTasks"
-    },
-    "data": {
-        "excluded": [],
-        "requested": ["build"]
-    }
-}
-----
-
-GE Export API. Create your own analytics
-
-=== GE Performance Dashboard
-
-[.shadow]
-image::performance.png[width=1000px, height=auto]
-
-GE performance dashboard. Understand build cache gains over the time
-
-=== Teamcity REST API
-
-[.shadow]
-image::statistics.png[width=1000px, height=auto]
-
-TC Rest API. Ensure that you're going in the right direction
 
 == Avoid maintenance waste
 
@@ -236,12 +172,77 @@ spec.count.times { i ->
 
 Gradle FTW
 
+== Increase CI resource efficiency
+
+=== Teamcity Architecture
+
+[.shadow]
+image::tc.png[width=auto, height=600px]
+
+=== CI agent environments
+
+* Bare hardware
+* Virtual machines
+* Semi permanent containers
+* Ephemeral containers
+
+=== Performance on CI agent environments
+
+=== Operations on CI agent environments
+
+=== Gradle Enterprise CI agent setup
+
+== Measure acceleration
+
+=== Key Metrics
+
+* Time Spent in Queue
+* Total time of key build
+* Retry ratio
+
+=== Teamcity REST API
+
+[.shadow]
+image::statistics.png[width=1000px, height=auto]
+
+TC Rest API. Ensure that you're going in the right direction
+
+=== GE Export API
+
+[source,json]
+----
+id: 2
+event: BuildEvent
+data: {
+    "timestamp": 1466640000001,
+    "type": {
+        "majorVersion": 1,
+        "minorVersion": 0,
+        "eventType": "BuildRequestedTasks"
+    },
+    "data": {
+        "excluded": [],
+        "requested": ["build"]
+    }
+}
+----
+
+GE Export API. Create your own analytics
+
+=== GE Performance Dashboard
+
+[.shadow]
+image::performance.png[width=1000px, height=auto]
+
+GE performance dashboard. Understand build cache gains over the time
+
+
 == Conclusion
 
 * Shape your pipeline around the build cache and parallelisation
+* CI as code
 * Be aware of the trade offs when setting up CI agents infra
 * Measure everything
-* CI as code
 
 == Questions
 
